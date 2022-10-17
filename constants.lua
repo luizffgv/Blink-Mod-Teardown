@@ -1,0 +1,2 @@
+ID = "blink"
+MODID = "blink"
