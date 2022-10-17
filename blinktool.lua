@@ -13,6 +13,7 @@
 ---@field COOLDOWN_DURATION number
 ---@field COUGH_DURATION number
 ---@field KEYBIND string
+---@field SHAKE boolean
 ---@field status BlinkTool.status_id
 ---@field sourcepos table
 ---@field targetpos table
@@ -53,6 +54,7 @@ BlinkTool.KEYBIND = Registry:Get(Registry.KEYS.KEYBIND)
 if BlinkTool.KEYBIND == "" then
     BlinkTool.KEYBIND = nil
 end
+BlinkTool.SHAKE = Registry:Get(Registry.KEYS.EXPERIMENTAL_SHAKE)
 
 
 
@@ -78,6 +80,9 @@ end
 function BlinkTool:_StartPreview()
     ReleasePlayerGrab()
     self.status = self.STATUS_IDS.PREVIEWING
+    if self.SHAKE then
+        ShakeCamera(0.4)
+    end
 end
 
 ---Starts blink. Should only be called while previewing.
@@ -93,6 +98,9 @@ function BlinkTool:_StartBlink()
 
     PlaySound(self.SOUNDS.BLINK)
     self:_SpawnBlinkParticles()
+    if self.SHAKE then
+        ShakeCamera(0.75)
+    end
 end
 
 ---Checks if the player is not blinking nor previewing
@@ -173,6 +181,16 @@ function BlinkTool:_ApplyBlinkPostProcessing()
     SetPostProcessingProperty("saturation", effect_intensity)
 end
 
+---Makes the player cough
+function BlinkTool:_Cough()
+    self.cough_cooldown = self.COUGH_DURATION
+    PlaySound(self.SOUNDS.COUGH)
+    SetPlayerHealth(GetPlayerHealth() * 0.75)
+    if self.SHAKE then
+        ShakeCamera(0.5)
+    end
+end
+
 ---Adds and enables the tool
 function BlinkTool:Init()
     self.status = BlinkTool.STATUS_IDS.IDLE
@@ -195,9 +213,7 @@ function BlinkTool:Tick(dt)
             and self:_IsIdling() then
             if self.cooldown then
                 if not self.cough_cooldown then
-                    self.cough_cooldown = self.COUGH_DURATION
-                    PlaySound(self.SOUNDS.COUGH)
-                    SetPlayerHealth(GetPlayerHealth() * 0.75)
+                    self:_Cough()
                 end
             else
                 self:_StartPreview()

@@ -26,7 +26,8 @@ Registry.KEYS = {
     RANGE = Registry.Key:New("range", "float", 15),
     COOLDOWN = Registry.Key:New("cooldown", "float", 15),
     DURATION = Registry.Key:New("duration", "float", 0.5),
-    KEYBIND = Registry.Key:New("keybind", "string", "")
+    KEYBIND = Registry.Key:New("keybind", "string", ""),
+    EXPERIMENTAL_SHAKE = Registry.Key:New("experimental.shake", "bool", false)
 }
 
 Registry._PERSISTENT = "savegame.mod." .. MODID .. "."

@@ -122,6 +122,55 @@ function SliderI(name, value, min, max, size, default)
     return math.ceil(res - 0.5), done
 end
 
+---Displays a checkbox
+---@param name string Name to be displayed
+---@param value boolean Current value of the property
+---@param default? boolean Default value of the property
+---@return boolean # New value of the property
+function Checkbox(name, value, default)
+    local TEXT_HEIGHT = 32
+    local IMAGES = {
+        -- This function assumes both images have 1:1 aspect ratio, but they can
+        --  have different sizes
+        [true] = "ui/common/box-solid-6.png",
+        [false] = "ui/common/box-outline-fill-6.png"
+    }
+    local IMG_SZ = math.max((UiGetImageSize(IMAGES[true])), (UiGetImageSize(IMAGES[false])))
+    local TEXT_MARGIN = 8
+    local HEIGHT = math.max(TEXT_HEIGHT, IMG_SZ)
+    local MARGIN = 16
+
+    do
+        UiPush()
+
+        UiAlign("middle")
+        UiTranslate(0, HEIGHT / 2)
+        UiColor(GetAccentColor())
+
+        do
+            UiPush()
+            if value ~= default then
+                UiColor(GetForegroundColor())
+            end
+
+            if UiImageButton(IMAGES[value]) then
+                value = not value
+            end
+            UiPop()
+        end
+
+        UiTranslate(IMG_SZ + TEXT_MARGIN, 0)
+        UiFont("bold.ttf", TEXT_HEIGHT)
+        UiText(name)
+
+        UiPop()
+    end
+
+    UiTranslate(0, HEIGHT + MARGIN)
+
+    return value
+end
+
 function Title(text)
     local TEXT_HEIGHT = 64
     local MARGIN = 32
@@ -182,6 +231,12 @@ function DoSliders()
     if range_r or duration_r then
         PreviewProgress = 0
     end
+end
+
+function DoCheckboxes()
+    UiTranslate(-SETTINGS_WIDTH / 2, 0)
+    Shake = Checkbox("Camera shake (experimental)", Shake, Registry:GetDefault(Registry.KEYS.EXPERIMENTAL_SHAKE))
+    UiTranslate(SETTINGS_WIDTH / 2, 0)
 end
 
 function DoButtons()
@@ -286,6 +341,7 @@ function SaveSettings()
     Registry:Set(Registry.KEYS.COOLDOWN, Cooldown)
     Registry:Set(Registry.KEYS.DURATION, Duration)
     Registry:Set(Registry.KEYS.KEYBIND, BoundKey)
+    Registry:Set(Registry.KEYS.EXPERIMENTAL_SHAKE, Shake)
 end
 
 function init()
@@ -293,6 +349,7 @@ function init()
     Cooldown = Registry:Get(Registry.KEYS.COOLDOWN)
     Duration = Registry:Get(Registry.KEYS.DURATION)
     BoundKey = Registry:Get(Registry.KEYS.KEYBIND)
+    Shake = Registry:Get(Registry.KEYS.EXPERIMENTAL_SHAKE)
 
     BindingModal = false
     PreviewProgress = nil
@@ -311,6 +368,7 @@ function draw()
         UiTranslate(UiCenter(), 256)
         DoTitle()
         DoSliders()
+        DoCheckboxes()
         DoButtons()
         UiPop()
     end
