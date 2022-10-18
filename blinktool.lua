@@ -209,7 +209,12 @@ function BlinkToolModule()
         if GetBool("level.unlimitedammo") then
             SetFloat("game.tool." .. Constants.ID .. ".ammo", 10000)
         elseif HasKey("game.tool.blink.ammo") then
-            self.cooldown = GetFloat("game.tool.blink.ammo")
+            local ammo = GetFloat("game.tool.blink.ammo")
+            if ammo == 10000 then
+                self.cooldown = 0
+            else
+                self.cooldown = ammo
+            end
         end
     end
 
@@ -266,8 +271,12 @@ function BlinkToolModule()
             end
         end
 
-        if self.cooldown and self:_IsIdling() then
-            SetFloat("game.tool." .. Constants.ID .. ".ammo", self.cooldown + 1)
+        if self.cooldown then
+            if self:_IsIdling() then
+                SetFloat("game.tool." .. Constants.ID .. ".ammo", self.cooldown + 1)
+            end
+        else
+            SetFloat("game.tool." .. Constants.ID .. ".ammo", 10000)
         end
 
         if self.cough_cooldown then
