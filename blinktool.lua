@@ -208,7 +208,8 @@ end
 ---@param dt number
 function BlinkTool:Tick(dt)
     -- Handle input
-    if (self.KEYBIND or (not InputPressed("lmb") and self:_InHand())) and GetPlayerVehicle() == 0 then
+    if (self.KEYBIND or (not InputPressed("lmb") and self:_InHand())) and GetPlayerVehicle() == 0 and
+        not GetBool("game.map.enabled") then
         if (not self.KEYBIND and self:_InHand() and InputPressed("rmb") or self.KEYBIND and InputPressed(self.KEYBIND))
             and self:_IsIdling() then
             if self.cooldown then
