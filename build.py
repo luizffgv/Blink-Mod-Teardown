@@ -6,9 +6,10 @@ import yaml
 DIST = Path("dist")
 SRC = Path("src")
 ASSETS = Path("assets")
+LIB = Path("tmbslib")
 
 
-def process_meta(filename: str):
+def process_info(filename: str):
     with open(filename, "r", encoding="utf-8") as file:
         info = yaml.safe_load(file)
 
@@ -28,36 +29,58 @@ def process_meta(filename: str):
 
 
 def process_file(filename: str, included: Set[str] = None):
+    def include(path):
+        nonlocal output
+        if path not in included:
+            try:
+                output += process_file(path, included)
+            except FileNotFoundError:
+                print(
+                    f'At "{filename}", line {lineno}: Can\'t include "{path}" (file not found)'
+                )
+
+    def get_arg(line):
+        start = line.find('"')
+        end = line.rfind('"')
+        return line[start + 1 : end]
+
     if included is None:
         included = set()
 
     lineno = 0
     output = ""
+    module = None
+    deps = []
     with (SRC / filename).with_suffix(".lua").open("r") as file:
         included.add(filename)  # Add early to prevent recursion
 
         while (line := file.readline()) != "":
             lineno += 1
 
-            if line.startswith("include"):
-                start = line.find('"')
-                end = line.rfind('"')
-                incl_file = line[start + 1 : end]
-                if incl_file not in included:
-                    try:
-                        output += process_file(incl_file, included)
-                    except FileNotFoundError:
-                        print(
-                            f'At "{filename}", line {lineno}: Can\'t include "{incl_file}" (file not found)'
-                        )
+            if line.startswith("_include"):
+                include(get_arg(line))
+            elif line.startswith("_module"):
+                module = get_arg(line)
+            elif line.startswith("_requires"):
+                dep = get_arg(line)
+                deps.append(dep)
+                include(dep)
             else:
                 output += line
 
+    if module is not None:
+        output += f'\n_Module("{module}"'
+        if len(deps) > 0:
+            output += ", {" + ",".join(f'"{dep}"' for dep in deps) + "}"
+        output += ")\n"
     return output
 
 
 def process_entrypoint(file: str):
     with (DIST / file).with_suffix(".lua").open("w") as output:
+        with (LIB / "internal" / "modulesystem.lua").open("r") as tmbs_modulesystem:
+            output.write(tmbs_modulesystem.read())
+
         output.write(process_file(file))
 
 
@@ -73,6 +96,6 @@ if __name__ == "__main__":
 
     copy2("preview.jpg", DIST)
 
-    process_meta("meta.yml")
+    process_info("info.yml")
     process_entrypoint("main")
     process_entrypoint("options")

@@ -1,0 +1,11 @@
+{
+    "Lua.diagnostics.ignoredFiles": "Disable",
+    "Lua.runtime.version": "Lua 5.1",
+    "Lua.workspace.library": [
+        "tmbslib/meta"
+    ],
+    "Lua.workspace.ignoreDir": [
+        ".vscode/",
+        "tmbslib/internal/"
+    ]
+}

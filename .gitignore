@@ -1,2 +1,4 @@
 .venv
 dist
+.vscode/*
+!.vscode/recommended-settings.json

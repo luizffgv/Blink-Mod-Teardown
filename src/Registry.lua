@@ -1,4 +1,5 @@
-include "Constants"
+_module "Registry"
+_requires "Constants"
 
 ---@class Registry
 ---@field KEYS table<string, Registry.Key>
@@ -70,5 +71,3 @@ function RegistryLoader()
         return key.default
     end
 end
-
-Module("Registry", { "Constants" })

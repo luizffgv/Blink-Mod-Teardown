@@ -1,5 +1,6 @@
-include "Registry"
-include "Vectors"
+_module "BlinkTool"
+_requires "Registry"
+_requires "Vectors"
 
 -- ---------------------------------- Types --------------------------------- --
 
@@ -310,5 +311,3 @@ function BlinkToolLoader()
     function BlinkTool:Draw(dt)
     end
 end
-
-Module("BlinkTool", { "Registry", "Vectors" })

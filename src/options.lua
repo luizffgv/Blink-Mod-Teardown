@@ -1,7 +1,4 @@
-include "modulesystem"
-include "Registry"
-
-Require "Registry"
+_include "Registry"
 
 -- -------------------------------- Constants ------------------------------- --
 
@@ -347,6 +344,8 @@ function SaveSettings()
 end
 
 function init()
+    Load "Registry"
+
     Range = Registry:Get(Registry.KEYS.RANGE)
     Cooldown = Registry:Get(Registry.KEYS.COOLDOWN)
     Duration = Registry:Get(Registry.KEYS.DURATION)

@@ -1,14 +1,12 @@
-include "modulesystem"
-include "BlinkTool"
+_include "BlinkTool"
 
 function LoadModules()
-    Require "BlinkTool"
+    Load "BlinkTool"
     BlinkTool:Init()
 end
 
 function init()
     LoadModules()
-    BlinkTool:Init()
 end
 
 function tick(dt)
