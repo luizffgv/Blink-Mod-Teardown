@@ -1,11 +1,12 @@
-function RegistryModule()
+include "Constants"
 
-    ---@class Registry
-    ---@field KEYS table<string, Registry.Key>
-    ---@field _PERSISTENT string Path to the mod's persistent keys. Includes a trailing dot!
-    Registry = {
-    }
+---@class Registry
+---@field KEYS table<string, Registry.Key>
+---@field _PERSISTENT string Path to the mod's persistent keys. Includes a trailing dot!
+Registry = {
+}
 
+function RegistryLoader()
     ---@alias Registry.Key.type "int" | "float" | "str" | "bool"
 
     ---@class Registry.Key
@@ -68,7 +69,6 @@ function RegistryModule()
     function Registry:GetDefault(key)
         return key.default
     end
-
-    return Registry
-
 end
+
+Module("Registry", { "Constants" })

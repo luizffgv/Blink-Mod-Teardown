@@ -1,5 +1,7 @@
-#include "constants.lua"
-#include "registry.lua"
+include "modulesystem"
+include "Registry"
+
+Require "Registry"
 
 -- -------------------------------- Constants ------------------------------- --
 
@@ -344,14 +346,7 @@ function SaveSettings()
     Registry:Set(Registry.KEYS.EXPERIMENTAL_SHAKE, Shake)
 end
 
-function LoadModules()
-    ConstantsModule()
-    RegistryModule()
-end
-
 function init()
-    LoadModules()
-
     Range = Registry:Get(Registry.KEYS.RANGE)
     Cooldown = Registry:Get(Registry.KEYS.COOLDOWN)
     Duration = Registry:Get(Registry.KEYS.DURATION)

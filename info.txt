@@ -1,4 +1,0 @@
-name = Blink
-author = luizffgv
-description = [noupload]Traverse short (or very long, it's configurable!) distances in an instant, and you can even pass through glass! Heavily inspired by the Dishonored franchise.
-tags=Tool,Gameplay

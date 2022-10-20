@@ -1,13 +1,8 @@
-#include "blinktool.lua"
-#include "constants.lua"
-#include "registry.lua"
-#include "vectors.lua"
+include "modulesystem"
+include "BlinkTool"
 
 function LoadModules()
-    ConstantsModule()
-    RegistryModule()
-    VectorsModule()
-    BlinkToolModule()
+    Require "BlinkTool"
     BlinkTool:Init()
 end
 

@@ -1,0 +1,4 @@
+{
+    "Lua.diagnostics.ignoredFiles": "Disable",
+    "Lua.runtime.version": "Lua 5.1",
+}

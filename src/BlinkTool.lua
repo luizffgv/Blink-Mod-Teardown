@@ -1,30 +1,32 @@
-function BlinkToolModule()
+include "Registry"
+include "Vectors"
 
-    -- ---------------------------------- Types --------------------------------- --
+-- ---------------------------------- Types --------------------------------- --
 
-    ---@alias handle number
+---@alias handle number
 
-    ---@class BlinkTool
-    ---@field BLINK_PARTICLES_N integer
-    ---@field BLINK_DURATION number
-    ---@field BLINK_DURATION_DEFAULT number
-    ---@field RANGE number
-    ---@field COOLDOWN_DURATION number
-    ---@field COUGH_DURATION number
-    ---@field KEYBIND string
-    ---@field SHAKE boolean
-    ---@field status BlinkTool.status_id
-    ---@field sourcepos table
-    ---@field targetpos table
-    ---@field previewpos table
-    ---@field player_rot table
-    ---@field progress number
-    ---@field cooldown number Current cooldown. nil if out of cooldown.
-    ---@field cough_cooldown number
-    BlinkTool = {
+---@class BlinkTool
+---@field BLINK_PARTICLES_N integer
+---@field BLINK_DURATION number
+---@field BLINK_DURATION_DEFAULT number
+---@field RANGE number
+---@field COOLDOWN_DURATION number
+---@field COUGH_DURATION number
+---@field KEYBIND string
+---@field SHAKE boolean
+---@field status BlinkTool.status_id
+---@field sourcepos table
+---@field targetpos table
+---@field previewpos table
+---@field player_rot table
+---@field progress number
+---@field cooldown number Current cooldown. nil if out of cooldown.
+---@field cough_cooldown number
+BlinkTool = {
 
-    }
+}
 
+function BlinkToolLoader()
     ---@enum BlinkTool.status_id
     BlinkTool.STATUS_IDS = {
         IDLE = 0,
@@ -200,7 +202,7 @@ function BlinkToolModule()
         self.status = BlinkTool.STATUS_IDS.IDLE
         self.cough_cooldown = nil
 
-        RegisterTool(Constants.ID, "Blink", "MOD/vox/empty.vox")
+        RegisterTool(Constants.ID, "Blink", "MOD/assets/vox/empty.vox")
 
         if not BlinkTool.KEYBIND then
             SetBool("game.tool." .. Constants.ID .. ".enabled", true)
@@ -308,3 +310,5 @@ function BlinkToolModule()
     function BlinkTool:Draw(dt)
     end
 end
+
+Module("BlinkTool", { "Registry", "Vectors" })
