@@ -183,7 +183,7 @@ function BlinkToolLoader()
 
     ---Applies some post processing. Should only be called while blinking
     function BlinkTool:_ApplyBlinkPostProcessing()
-        local effect_intensity = 1 - (1 - (self.progress * 2 - 1) ^ 2) / 4
+        local effect_intensity = 0.75 + (self.progress - 0.5) ^ 2
         SetPostProcessingProperty("colorbalance", effect_intensity, effect_intensity, 1)
         SetPostProcessingProperty("saturation", effect_intensity)
     end
